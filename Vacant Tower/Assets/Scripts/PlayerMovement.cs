@@ -4,33 +4,47 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-    public float playerSpeed;
+    public float moveSpeed;
 
-    public Vector2 playerLastMovement;
+    private bool playerMoving;
+    public Vector2 lastMove;
 
-    private bool playerMovement;
+    private static bool playerExists;
+
 	// Use this for initialization
 	void Start () {
-		
+
+
+        if(!playerExists)
+        {
+            playerExists = true;
+            DontDestroyOnLoad(transform.gameObject);
+        } else
+        {
+            Destroy(gameObject);
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        playerMovement = false;
+        playerMoving = false;
 
         if (Input.GetAxisRaw("Horizontal") > 0.5f || Input.GetAxisRaw("Horizontal") < -0.5f)
         {
-            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * playerSpeed * Time.deltaTime, 0f, 0f));
-            playerMovement = true;
-            playerLastMovement = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
+            playerMoving = true;
+            lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
         }
         if (Input.GetAxisRaw("Vertical") > 0.5f || Input.GetAxisRaw("Vertical") < -0.5f)
         {
-            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * playerSpeed * Time.deltaTime, 0f));
-            playerMovement = true;
-            playerLastMovement = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+            transform.Translate(new Vector3(0f,Input.GetAxisRaw("Vertical") * moveSpeed * Time.deltaTime, 0f));
+            playerMoving = true;
+            lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
         }
+
+        
 
     }
 }
+
